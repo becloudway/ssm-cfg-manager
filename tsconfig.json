@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "declaration": true,
+        "moduleResolution": "node",
+        "target": "es2016",
+        "sourceMap": true,
+        "esModuleInterop": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "noImplicitAny": true,
+        "resolveJsonModule": true,
+        "baseUrl": ".",
+        "paths": {
+            "@jmc/*": ["packages/*"]
+        },
+        "outDir": "lib",
+        "rootDir": "src"
+    },
+    "exclude": [
+        "node_modules", "dist", "*/**.spec.ts"
+    ],
+    "include": ["./src"]
+}
