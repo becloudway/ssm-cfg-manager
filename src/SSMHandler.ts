@@ -8,15 +8,19 @@ const REGION = process.env.AWS_REGION || "eu-west-1";
  * making usage a bit easier.
  */
 export class SSMHandler {
-    private static _cacheHandler = new CacheHandler();
-    private static ssm = new SSM({ region: REGION });
+    private _cacheHandler = new CacheHandler();
+    private ssm: SSM;
+
+    public constructor(region: string = REGION) {
+        this.ssm = new SSM({ region });
+    }
 
     /**
      * Returns a cached object if it's found
      *
      * @param key the key to get from the cache
      */
-    private static getCached<T>(key: string): T {
+    private getCached<T>(key: string): T {
         try {
             const obj = this._cacheHandler.get(key);
             return obj.object as T;
@@ -30,7 +34,7 @@ export class SSMHandler {
      *
      * @param key the key/path of the parameter to be obtained
      */
-    private static async get(key: string): Promise<string> {
+    private async get(key: string): Promise<string> {
         const result = await this.ssm
             .getParameter({
                 Name: key,
@@ -45,12 +49,12 @@ export class SSMHandler {
 
     /**
      * Gets a parameter from AWS Parameter Store, parses it as a JSON object
-     * and caches it for as long as the programm runs or until the cache time expires
+     * and caches it for as long as the program runs or until the cache time expires
      *
      * @param key the key/path of the parameter to be obtained
      * @param cacheForMs for how long the item is to be in the cache, undefined means keep it without expiration
      */
-    public static async getJson<T>(key: string, cacheForMs?: number): Promise<T> {
+    public async getJson<T>(key: string, cacheForMs?: number): Promise<T> {
         const cached = this.getCached(key);
         if (cached) return cached as T;
 
@@ -65,7 +69,7 @@ export class SSMHandler {
      *
      * @param key the key/path of the parameter to be obtained
      */
-    public static async getUnCachedJson<T>(key: string): Promise<T> {
+    public async getUnCachedJson<T>(key: string): Promise<T> {
         const value = await this.get(key);
 
         let parsed;
@@ -85,7 +89,7 @@ export class SSMHandler {
      * @param key the key/path of the parameter to be obtained
      * @param cacheForMs for how long the item is to be in the cache, undefined means keep it without expiration
      */
-    public static async getText(key: string, cacheForMs?: number): Promise<string> {
+    public async getText(key: string, cacheForMs?: number): Promise<string> {
         const cached = this.getCached(key);
         if (cached) return cached as string;
 
@@ -100,21 +104,21 @@ export class SSMHandler {
      *
      * @param key the key/path of the parameter to be obtained
      */
-    public static async getUncachedText(key: string): Promise<string> {
+    public async getUncachedText(key: string): Promise<string> {
         return await this.get(key);
     }
 
     /**
      * Clear the cache
      */
-    public static clearCache(): void {
+    public clearCache(): void {
         this._cacheHandler.flush();
     }
 
     /**
      * Get the cache handler used for caching
      */
-    public static get cacheHandler(): CacheHandler {
+    public get cacheHandler(): CacheHandler {
         return this._cacheHandler;
     }
 }

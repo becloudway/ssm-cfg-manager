@@ -8,6 +8,11 @@ export interface AwsSdkMocks {
 const SSMGetParameterMock = jest.fn();
 
 class SSMMock {
+    public region: string;
+    public constructor({ region }: { region: string }) {
+        this.region = region;
+    }
+
     public getParameter(): void {
         return;
     }
