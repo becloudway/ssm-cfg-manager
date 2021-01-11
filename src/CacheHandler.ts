@@ -90,7 +90,7 @@ export class CacheHandler {
         const obj = this.cache.get(key) as CachedObject<T>;
         if (obj.hasExpired()) {
             this.cache.delete(key);
-            throw new ExpiredError(key);
+            throw new ExpiredError(key, obj.cacheForMs);
         }
 
         return obj;

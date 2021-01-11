@@ -3,7 +3,6 @@
  */
 export class CachedObject<T> {
     private createdAt = Date.now();
-    private cacheForMs?: number;
 
     private isTimed = false;
     private _object: T;
@@ -14,9 +13,8 @@ export class CachedObject<T> {
      * @param data the data to be wrapped and cached
      * @param cacheForMs the time for which this obj should remain in the cache
      */
-    public constructor(data: T, cacheForMs: number = undefined) {
+    public constructor(data: T, public cacheForMs: number = undefined) {
         this._object = data;
-        this.cacheForMs = cacheForMs;
 
         if (cacheForMs) {
             this.isTimed = true;

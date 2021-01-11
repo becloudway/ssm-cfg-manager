@@ -9,7 +9,7 @@ export enum ErrorTypes {
 export class ExpiredError extends Error {
     public type: ErrorTypes.EXPIRED;
 
-    public constructor(key: string) {
+    public constructor(public key: string, public cacheTime?: number) {
         super(`Key ${key} has expired`);
     }
 }
@@ -20,7 +20,7 @@ export class ExpiredError extends Error {
 export class NotFoundError extends Error {
     public type: ErrorTypes.NOT_FOUND;
 
-    public constructor(key: string) {
+    public constructor(public key: string) {
         super(`Key ${key} not in cache`);
     }
 }

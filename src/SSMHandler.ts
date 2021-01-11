@@ -1,5 +1,6 @@
 import { CacheHandler } from "./CacheHandler";
-import { SSM } from "aws-sdk";
+import SSM from "aws-sdk/clients/ssm";
+import { ExpiredError } from "./CacheErrors";
 
 const REGION = process.env.AWS_REGION || "eu-west-1";
 
@@ -21,12 +22,8 @@ export class SSMHandler {
      * @param key the key to get from the cache
      */
     private getCached<T>(key: string): T {
-        try {
-            const obj = this._cacheHandler.get(key);
-            return obj.object as T;
-        } catch (ex) {
-            return undefined;
-        }
+        const obj = this._cacheHandler.get(key);
+        return obj.object as T;
     }
 
     /**
@@ -55,8 +52,14 @@ export class SSMHandler {
      * @param cacheForMs for how long the item is to be in the cache, undefined means keep it without expiration
      */
     public async getJson<T>(key: string, cacheForMs?: number): Promise<T> {
-        const cached = this.getCached(key);
-        if (cached) return cached as T;
+        try {
+            const cached = this.getCached(key);
+            if (cached) return cached as T;
+        } catch (ex) {
+            if ((ex instanceof ExpiredError)) {
+                cacheForMs = cacheForMs || ex.cacheTime;
+            }
+        }
 
         const parsed = await this.getUnCachedJson<T>(key);
 
@@ -76,7 +79,7 @@ export class SSMHandler {
         try {
             parsed = JSON.parse(value);
         } catch (ex) {
-            throw new Error(`Falied to parse ${key} error: ${ex.message}`);
+            throw new Error(`Failed to get uncached JSON key ${key} error: ${ex.message}`);
         }
 
         return parsed;
@@ -90,8 +93,14 @@ export class SSMHandler {
      * @param cacheForMs for how long the item is to be in the cache, undefined means keep it without expiration
      */
     public async getText(key: string, cacheForMs?: number): Promise<string> {
-        const cached = this.getCached(key);
-        if (cached) return cached as string;
+        try {
+            const cached = this.getCached(key);
+            if (cached) return cached as string;
+        } catch (ex) {
+            if ((ex instanceof ExpiredError)) {
+                cacheForMs = cacheForMs || ex.cacheTime;
+            }
+        }
 
         const value = await this.getUncachedText(key);
 
