@@ -20,7 +20,7 @@
         "ts-jest": "^25.3.0",
         "tslint": "^5.20.0",
         "tslint-config-prettier": "^1.18.0",
-        "typescript": "^3.8.3"
+        "typescript": "^3.9.8"
     },
     "peerDependencies": {
         "aws-sdk": "^2.540.0"
