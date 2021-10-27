@@ -1,4 +1,4 @@
-import { __getMocks__ } from "../__mocks__/aws-sdk/clients/ssm";
+import { __getMocks__ } from "../__mocks__/aws-sdk";
 import { SSMHandler, StaticSSMHandler } from "../src";
 
 const ssmHandler = new SSMHandler("eu-west-1");

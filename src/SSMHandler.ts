@@ -1,5 +1,5 @@
 import { CacheHandler } from "./CacheHandler";
-import SSM from "aws-sdk/clients/ssm";
+import { SSM } from "aws-sdk";
 import { ExpiredError } from "./CacheErrors";
 
 const REGION = process.env.AWS_REGION || "eu-west-1";

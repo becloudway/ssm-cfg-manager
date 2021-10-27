@@ -36,5 +36,4 @@ export const __getMocks__: AwsSdkMocks = {
     SSMGetParameterMock,
 };
 
-const SSM = SSMMock;
-export default SSM;
+export const SSM = SSMMock;
