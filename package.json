@@ -23,7 +23,6 @@
         "typescript": "^3.9.8"
     },
     "peerDependencies": {
-        "aws-sdk": "^2.540.0"
     },
     "dependencies": {}
 }
