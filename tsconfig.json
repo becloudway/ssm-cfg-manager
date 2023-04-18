@@ -3,7 +3,7 @@
         "module": "commonjs",
         "declaration": true,
         "moduleResolution": "node",
-        "target": "es2016",
+        "target": "es2020",
         "sourceMap": true,
         "esModuleInterop": true,
         "noImplicitAny": true,
