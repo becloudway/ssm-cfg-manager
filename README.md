@@ -8,7 +8,10 @@
 
 Simple library to store SSM parameters in memory with multi-region, automatic renewal, expiration and parsing support.
 
-> aws-sdk is a peer dependency, make sure that you provide it yourself if needed
+> @aws-sdk/client-ssm is a peer dependency, make sure that you provide it yourself if needed
+
+> :warning: aws-sdk v2 is no longer supported upward of ssm-cfg-manager Version 2.0.0
+
 
 ## Documentation
 

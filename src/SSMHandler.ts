@@ -1,5 +1,5 @@
 import { CacheHandler } from "./CacheHandler";
-import { SSM } from "aws-sdk";
+import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
 import { ExpiredError } from "./CacheErrors";
 
 const REGION = process.env.AWS_REGION || "eu-west-1";
@@ -10,10 +10,10 @@ const REGION = process.env.AWS_REGION || "eu-west-1";
  */
 export class SSMHandler {
     private _cacheHandler = new CacheHandler();
-    private ssm: SSM;
+    private ssm: SSMClient;
 
     public constructor(region: string = REGION) {
-        this.ssm = new SSM({ region });
+        this.ssm = new SSMClient({ region });
     }
 
     /**
@@ -32,12 +32,7 @@ export class SSMHandler {
      * @param key the key/path of the parameter to be obtained
      */
     private async get(key: string): Promise<string> {
-        const result = await this.ssm
-            .getParameter({
-                Name: key,
-                WithDecryption: true,
-            })
-            .promise();
+        const result = await this.ssm.send(new GetParameterCommand({ Name: key, WithDecryption: true }));
 
         const value = result?.Parameter?.Value;
 
@@ -56,7 +51,7 @@ export class SSMHandler {
             const cached = this.getCached(key);
             if (cached) return cached as T;
         } catch (ex) {
-            if ((ex instanceof ExpiredError)) {
+            if (ex instanceof ExpiredError) {
                 cacheForMs = cacheForMs || ex.cacheTime;
             }
         }
@@ -97,7 +92,7 @@ export class SSMHandler {
             const cached = this.getCached(key);
             if (cached) return cached as string;
         } catch (ex) {
-            if ((ex instanceof ExpiredError)) {
+            if (ex instanceof ExpiredError) {
                 cacheForMs = cacheForMs || ex.cacheTime;
             }
         }

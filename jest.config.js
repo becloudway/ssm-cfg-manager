@@ -1,11 +1,5 @@
 module.exports = {
-    name: "@jmc/config-manager",
     displayName: "SSM Credentials Manager",
-    globals: {
-        "ts-jest": {
-            tsConfig: "<rootDir>/tsconfig.json",
-        },
-    },
     transform: {
         "^.+\\.ts$": "ts-jest",
     },
