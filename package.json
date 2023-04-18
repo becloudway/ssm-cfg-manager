@@ -3,6 +3,9 @@
     "version": "2.0.0",
     "description": "> TODO: description",
     "author": "Mitch Mommers <mitchmommers@gmail.com>",
+    "contributors": [
+        "Leandro Da Lanca <leandrodalanca@gmail.com>"
+    ],
     "license": "ISC",
     "main": "lib/index.js",
     "scripts": {
