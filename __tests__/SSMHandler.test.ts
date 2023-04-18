@@ -1,4 +1,4 @@
-import { mockClient, type AwsClientStub } from "aws-sdk-client-mock";
+import { mockClient, AwsClientStub } from "aws-sdk-client-mock";
 import "aws-sdk-client-mock-jest";
 import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
 import { SSMHandler, StaticSSMHandler } from "../src";
@@ -26,7 +26,7 @@ describe("SSMHandler", () => {
     });
 
     it("should get a parameter from SSM when it is not cached", async () => {
-        const key = "/jnj/policygate/public-key/staging";
+        const key = "/project/test";
 
         await ssmHandler.getText(key);
 
@@ -36,7 +36,7 @@ describe("SSMHandler", () => {
     });
 
     it("should get a parameter from SSM when it is cached", async () => {
-        const key = "/jnj/policygate/public-key/staging";
+        const key = "/project/test";
         mockSSMClient.on(GetParameterCommand).resolves({
             Parameter: {
                 Name: mockParameterResponse.Parameter.Name,
@@ -52,7 +52,7 @@ describe("SSMHandler", () => {
     });
 
     it("should remove the item from cache when an expiration is set", async () => {
-        const key = "/jnj/policygate/public-key/staging";
+        const key = "/project/test";
 
         await ssmHandler.getText(key, 500);
         expect(mockSSMClient).toHaveReceivedCommandTimes(GetParameterCommand, 1);
@@ -63,7 +63,7 @@ describe("SSMHandler", () => {
     });
 
     it("should remove the item from cache when an expiration is set and get it back automatically", async () => {
-        const key = "/jnj/policygate/public-key/staging";
+        const key = "/project/test";
 
         await ssmHandler.getText(key, 500);
         expect(mockSSMClient).toHaveReceivedCommandTimes(GetParameterCommand, 1);
