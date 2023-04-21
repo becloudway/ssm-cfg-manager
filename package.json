@@ -1,7 +1,7 @@
 {
     "name": "ssm-cfg-manager",
     "version": "2.0.0",
-    "description": "> TODO: description",
+    "description": "Simple caching tool for SSM parameters",
     "author": "Mitch Mommers <mitchmommers@gmail.com>",
     "contributors": [
         "Leandro Da Lanca <leandrodalanca@gmail.com>"
